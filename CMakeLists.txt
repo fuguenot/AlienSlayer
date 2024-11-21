@@ -17,8 +17,9 @@ set_source_files_properties("Resources/alienslayer.icns"
                             PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 set(APPLE_GUI_ICON alienslayer)
 
-add_executable(AlienSlayer MACOSX_BUNDLE "src/main.cpp"
-                                         "Resources/alienslayer.icns")
+add_executable(
+  AlienSlayer MACOSX_BUNDLE "src/main.cpp" "src/error.h" "src/error.cpp"
+                            "Resources/alienslayer.icns")
 
 set_target_properties(
   AlienSlayer
