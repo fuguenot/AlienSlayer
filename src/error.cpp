@@ -15,5 +15,5 @@ as::Error as::Error::sdl(const std::string &when) noexcept {
 }
 
 std::string as::Error::to_string() const noexcept {
-    return name + ": " + details + " (while " + when + ")";
+    return name + ": " + details + " (when " + when + ")";
 }
