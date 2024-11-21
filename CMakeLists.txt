@@ -20,7 +20,13 @@ set(APPLE_GUI_ICON alienslayer)
 
 add_executable(
   AlienSlayer MACOSX_BUNDLE
-  "src/main.cpp" "src/error.h" "src/error.cpp" "src/game.h" "src/game.cpp"
+  "src/main.cpp"
+  "src/error.h"
+  "src/error.cpp"
+  "src/game.h"
+  "src/game.cpp"
+  "src/spritesheet.h"
+  "src/spritesheet.cpp"
   "Resources/alienslayer.icns")
 
 set_target_properties(
