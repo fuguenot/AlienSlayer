@@ -14,6 +14,10 @@ as::Spritesheet::Spritesheet(const std::string &file,
         throw Error::sdl("initializing spritesheet texture '" + file + '\'');
 }
 
+as::Spritesheet::~Spritesheet() noexcept {
+    SDL_DestroyTexture(tex);
+}
+
 void as::Spritesheet::select(int x, int y) noexcept {
     srcrect.x = x * srcrect.w;
     srcrect.y = y * srcrect.h;

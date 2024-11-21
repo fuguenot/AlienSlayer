@@ -16,6 +16,7 @@ namespace as {
                     SDL_Renderer *rend,
                     int size_w,
                     int size_h);
+        ~Spritesheet() noexcept;
 
         void select(int x, int y) noexcept;
 
