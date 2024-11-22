@@ -7,8 +7,7 @@
 namespace as {
     class Game {
     private:
-        static const int SCRWIDTH = 800;
-        static const int SCRHEIGHT = 600;
+        int scrwidth, scrheight;
 
         SDL_Window *win;
         SDL_Renderer *rend;
@@ -19,6 +18,8 @@ namespace as {
         int click_x, click_y;
 
         std::vector<Alien> aliens;
+
+        unsigned int score, difficulty, passed;
 
         void init_sdl();
         void handle_events();

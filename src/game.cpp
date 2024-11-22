@@ -4,9 +4,16 @@
 #include <SDL_ttf.h>
 
 #include "error.h"
-#include "util.h"
 
-as::Game::Game() : running(false), click_x(-1), click_y(-1) {
+as::Game::Game()
+    : scrwidth(800),
+      scrheight(600),
+      running(false),
+      click_x(-1),
+      click_y(-1),
+      score(0),
+      difficulty(0),
+      passed(0) {
     init_sdl();
 }
 
@@ -29,9 +36,9 @@ void as::Game::init_sdl() {
     if ((win = SDL_CreateWindow("AlienSlayer",
                                 SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED,
-                                SCRWIDTH,
-                                SCRHEIGHT,
-                                SDL_WINDOW_METAL))
+                                scrwidth,
+                                scrheight,
+                                SDL_WINDOW_METAL | SDL_WINDOW_RESIZABLE))
         == nullptr)
         throw Error::sdl("creating SDL_Window");
     if ((rend = SDL_CreateRenderer(
@@ -52,6 +59,13 @@ void as::Game::handle_events() {
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
         case SDL_QUIT: running = false; break;
+        case SDL_WINDOWEVENT:
+            switch (e.window.type) {
+            case SDL_WINDOWEVENT_SIZE_CHANGED:
+                scrwidth = e.window.data1;
+                scrheight = e.window.data2;
+                break;
+            }
         }
 
         keystate = SDL_GetKeyboardState(NULL);
@@ -60,8 +74,21 @@ void as::Game::handle_events() {
 }
 
 void as::Game::update(std::uint64_t dt) {
-    for (Alien &alien : aliens)
-        alien.update(dt);
+    aliens.erase(std::remove_if(aliens.begin(),
+                                aliens.end(),
+                                [](const Alien &a) {
+                                    return a.get_state() == AlienState::DEAD;
+                                }),
+                 aliens.end());
+    int hits = 0;
+    for (Alien &alien : aliens) {
+        alien.update(dt, scrwidth, scrheight);
+        if (alien.get_state() == AlienState::HIT) {
+            hits++;
+            score++;
+        }
+    }
+    if (hits > 1) score += hits - 1;
 }
 
 void as::Game::render() {
@@ -80,8 +107,8 @@ void as::Game::start() {
 
     // debug
     aliens.push_back(Alien::spawn(alien_tex,
-                                  SCRWIDTH / 2 / Alien::SCALE,
-                                  SCRHEIGHT / 2 / Alien::SCALE,
+                                  scrwidth / 2.f / Alien::SCALE,
+                                  scrheight / 2.f / Alien::SCALE,
                                   0));
 
     while (running) {

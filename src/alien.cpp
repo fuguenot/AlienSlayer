@@ -28,14 +28,21 @@ void as::Alien::hit() {
     spritesheet.select(0, 1);
 }
 
-void as::Alien::update(std::uint64_t dt) {
+void as::Alien::update(std::uint64_t dt, int scrwidth, int scrheight) {
     switch (state) {
     case AlienState::ALIVE:
         x += vx * dt / 15;
         y += vy * dt / 15;
+
+        // bounds check (centered on sprite)
+        if (x < -SIZE / 2.f
+            || x > static_cast<float>(scrwidth) / SCALE - SIZE / 2.f
+            || y < -SIZE / 2.f
+            || y > static_cast<float>(scrheight) / SCALE - SIZE / 2.f)
+            state = AlienState::DEAD;
         break;
     case AlienState::HIT:
-        if (dt * death_timer++ >= 600) state = AlienState::SLAIN;
+        if (dt * death_timer++ >= 600) state = AlienState::DEAD;
     default: break;
     }
 }
@@ -46,4 +53,8 @@ void as::Alien::render(SDL_Renderer *rend) {
                         static_cast<int>(std::roundf(y * SCALE)),
                         SIZE * SCALE,
                         SIZE * SCALE});
+}
+
+as::AlienState as::Alien::get_state() const noexcept {
+    return state;
 }

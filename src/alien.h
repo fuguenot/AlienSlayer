@@ -3,7 +3,7 @@
 #include "spritesheet.h"
 
 namespace as {
-    enum class AlienState : char { ALIVE, PASSED, HIT, SLAIN };
+    enum class AlienState : char { ALIVE, DEAD, HIT };
 
     class Alien {
     private:
@@ -12,7 +12,7 @@ namespace as {
 
         Spritesheet spritesheet;
         float x, y;
-        const float vx, vy;
+        float vx, vy;
         AlienState state;
         unsigned int death_timer;
 
@@ -28,7 +28,9 @@ namespace as {
                            unsigned int difficulty);
 
         void hit();
-        void update(std::uint64_t dt);
+        void update(std::uint64_t dt, int scrwidth, int scrheight);
         void render(SDL_Renderer *rend);
+
+        AlienState get_state() const noexcept;
     };
 }  // namespace as
