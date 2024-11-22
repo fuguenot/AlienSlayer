@@ -22,7 +22,7 @@ namespace as {
 
         void init_sdl();
         void handle_events();
-        void update();
+        void update(std::uint64_t dt);
         void render();
 
     public:

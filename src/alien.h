@@ -9,7 +9,6 @@ namespace as {
     private:
         // both w and h
         static const int SIZE = 32;
-        static const int SCALE = 3;
 
         Spritesheet spritesheet;
         float x, y;
@@ -17,8 +16,11 @@ namespace as {
         AlienState state;
         unsigned int death_timer;
 
-    public:
         Alien(SDL_Texture *tex, float x, float y, float vx, float vy);
+
+    public:
+        static const int SCALE = 3;
+
         // v = rand[0, 5] + difficulty * 10; theta = rand[-π/2, π/2]
         static Alien spawn(SDL_Texture *tex,
                            float x,
@@ -26,7 +28,7 @@ namespace as {
                            unsigned int difficulty);
 
         void hit();
-        void update(std::uint32_t dt);
+        void update(std::uint64_t dt);
         void render(SDL_Renderer *rend);
     };
 }  // namespace as

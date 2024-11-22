@@ -4,6 +4,7 @@
 #include <SDL_ttf.h>
 
 #include "error.h"
+#include "util.h"
 
 as::Game::Game() : running(false), click_x(-1), click_y(-1) {
     init_sdl();
@@ -58,14 +59,15 @@ void as::Game::handle_events() {
     }
 }
 
-void as::Game::update() {
-    // TODO
+void as::Game::update(std::uint64_t dt) {
+    for (Alien &alien : aliens)
+        alien.update(dt);
 }
 
 void as::Game::render() {
     if (SDL_RenderClear(rend) < 0) throw Error::sdl("clearing screen");
 
-    for (Alien alien : aliens)
+    for (Alien &alien : aliens)
         alien.render(rend);
 
     SDL_RenderPresent(rend);
@@ -73,13 +75,21 @@ void as::Game::render() {
 
 void as::Game::start() {
     running = true;
+    std::uint64_t now, dt;
+    std::uint64_t prev = 0;
 
     // debug
-    aliens.emplace_back(alien_tex, 40, 30, 0, 0);
+    aliens.push_back(Alien::spawn(alien_tex,
+                                  SCRWIDTH / 2 / Alien::SCALE,
+                                  SCRHEIGHT / 2 / Alien::SCALE,
+                                  0));
 
     while (running) {
+        now = SDL_GetTicks64();
+        dt = now - prev;
+        prev = now;
         handle_events();
-        update();
+        update(dt);
         render();
     }
 }

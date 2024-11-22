@@ -28,11 +28,11 @@ void as::Alien::hit() {
     spritesheet.select(0, 1);
 }
 
-void as::Alien::update(std::uint32_t dt) {
+void as::Alien::update(std::uint64_t dt) {
     switch (state) {
     case AlienState::ALIVE:
-        x += vx * dt;
-        y = vy * dt;
+        x += vx * dt / 15;
+        y += vy * dt / 15;
         break;
     case AlienState::HIT:
         if (dt * death_timer++ >= 600) state = AlienState::SLAIN;
