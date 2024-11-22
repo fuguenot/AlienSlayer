@@ -66,6 +66,13 @@ void as::Game::handle_events() {
                 scrheight = e.window.data2;
                 break;
             }
+        case SDL_MOUSEBUTTONDOWN:
+            if (e.button.button == SDL_BUTTON_LEFT) {
+                clicked = true;
+                click_x = e.button.x;
+                click_y = e.button.y;
+            }
+            break;
         }
 
         keystate = SDL_GetKeyboardState(NULL);
@@ -82,6 +89,7 @@ void as::Game::update(std::uint64_t dt) {
                  aliens.end());
     int hits = 0;
     for (Alien &alien : aliens) {
+        if (clicked && alien.check_hit(click_x, click_y)) alien.hit();
         alien.update(dt, scrwidth, scrheight);
         if (alien.get_state() == AlienState::HIT) {
             hits++;
@@ -89,6 +97,7 @@ void as::Game::update(std::uint64_t dt) {
         }
     }
     if (hits > 1) score += hits - 1;
+    clicked = false;
 }
 
 void as::Game::render() {

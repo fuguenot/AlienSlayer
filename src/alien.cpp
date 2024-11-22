@@ -23,6 +23,13 @@ as::Alien as::Alien::spawn(SDL_Texture *tex,
     return {tex, x, y, v * std::cosf(theta), v * std::sinf(theta)};
 }
 
+bool as::Alien::check_hit(int click_x, int click_y) const noexcept {
+    return std::abs(x + SIZE / 2.f - static_cast<float>(click_x) / SCALE)
+               < THRESHOLD
+           && std::abs(y + SIZE / 2.f - static_cast<float>(click_y) / SCALE)
+                  < THRESHOLD;
+}
+
 void as::Alien::hit() {
     state = AlienState::HIT;
     spritesheet.select(0, 1);
@@ -35,10 +42,10 @@ void as::Alien::update(std::uint64_t dt, int scrwidth, int scrheight) {
         y += vy * dt / 15;
 
         // bounds check (centered on sprite)
-        if (x < -SIZE / 2.f
-            || x > static_cast<float>(scrwidth) / SCALE - SIZE / 2.f
-            || y < -SIZE / 2.f
-            || y > static_cast<float>(scrheight) / SCALE - SIZE / 2.f)
+        if (x + SIZE / 2.f < 0
+            || x + SIZE / 2.f > static_cast<float>(scrwidth) / SCALE
+            || y + SIZE / 2.f < 0
+            || y + SIZE / 2.f > static_cast<float>(scrheight) / SCALE)
             state = AlienState::DEAD;
         break;
     case AlienState::HIT:

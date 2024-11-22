@@ -13,6 +13,8 @@ namespace as {
 
     public:
         static Error sdl(const std::string &when) noexcept;
+        static Error out_of_bounds(const std::string &details,
+                                   const std::string &when) noexcept;
 
         std::string to_string() const noexcept;
     };

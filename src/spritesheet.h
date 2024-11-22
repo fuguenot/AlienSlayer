@@ -10,6 +10,7 @@ namespace as {
         std::string name;
         SDL_Rect srcrect;
         SDL_Texture *tex;
+        int w, h;
 
     public:
         Spritesheet(const std::string &name,
@@ -17,7 +18,7 @@ namespace as {
                     int size_w,
                     int size_h);
 
-        void select(int x, int y) noexcept;
+        void select(int x, int y);
 
         void render(SDL_Renderer *rend, SDL_Rect dstrect);
     };

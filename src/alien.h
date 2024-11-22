@@ -9,6 +9,7 @@ namespace as {
     private:
         // both w and h
         static const int SIZE = 32;
+        static const int THRESHOLD = 15;
 
         Spritesheet spritesheet;
         float x, y;
@@ -27,6 +28,7 @@ namespace as {
                            float y,
                            unsigned int difficulty);
 
+        bool check_hit(int click_x, int click_y) const noexcept;
         void hit();
         void update(std::uint64_t dt, int scrwidth, int scrheight);
         void render(SDL_Renderer *rend);

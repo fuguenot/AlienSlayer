@@ -13,8 +13,7 @@ namespace as {
         SDL_Renderer *rend;
         SDL_Texture *alien_tex;
 
-        bool running;
-        // -1 if click not registered that tick
+        bool running, clicked;
         int click_x, click_y;
 
         std::vector<Alien> aliens;
