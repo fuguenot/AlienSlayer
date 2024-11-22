@@ -3,7 +3,7 @@
 #include "spritesheet.h"
 
 namespace as {
-    enum class AlienState : char { ALIVE, DEAD, HIT };
+    enum class AlienState : char { ALIVE, PASSED, DEAD, HIT };
 
     class Alien {
     private:

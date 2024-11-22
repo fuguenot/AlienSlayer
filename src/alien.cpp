@@ -46,7 +46,7 @@ void as::Alien::update(std::uint64_t dt, int scrwidth, int scrheight) {
             || x + SIZE / 2.f > static_cast<float>(scrwidth) / SCALE
             || y + SIZE / 2.f < 0
             || y + SIZE / 2.f > static_cast<float>(scrheight) / SCALE)
-            state = AlienState::DEAD;
+            state = AlienState::PASSED;
         break;
     case AlienState::HIT:
         if (dt * death_timer++ >= 600) state = AlienState::DEAD;

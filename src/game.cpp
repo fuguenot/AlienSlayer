@@ -8,11 +8,12 @@
 as::Game::Game()
     : scrwidth(800),
       scrheight(600),
+      state(GameState::PLAYING),
       running(false),
       click_x(-1),
       click_y(-1),
       score(0),
-      difficulty(0),
+      difficulty(1),
       passed(0) {
     init_sdl();
 }
@@ -81,12 +82,6 @@ void as::Game::handle_events() {
 }
 
 void as::Game::update(std::uint64_t dt) {
-    aliens.erase(std::remove_if(aliens.begin(),
-                                aliens.end(),
-                                [](const Alien &a) {
-                                    return a.get_state() == AlienState::DEAD;
-                                }),
-                 aliens.end());
     int hits = 0;
     for (Alien &alien : aliens) {
         if (clicked && alien.check_hit(click_x, click_y)) alien.hit();
@@ -94,9 +89,20 @@ void as::Game::update(std::uint64_t dt) {
         if (alien.get_state() == AlienState::HIT) {
             hits++;
             score++;
-        }
+        } else if (alien.get_state() == AlienState::PASSED)
+            passed++;
     }
+    aliens.erase(std::remove_if(aliens.begin(),
+                                aliens.end(),
+                                [](const Alien &a) {
+                                    return a.get_state() == AlienState::DEAD
+                                           || a.get_state()
+                                                  == AlienState::PASSED;
+                                }),
+                 aliens.end());
     if (hits > 1) score += hits - 1;
+    if (score >= difficulty * 10) difficulty++;
+    if (passed >= 50) state = GameState::LOST;
     clicked = false;
 }
 

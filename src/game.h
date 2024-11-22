@@ -5,6 +5,8 @@
 #include "alien.h"
 
 namespace as {
+    enum class GameState { MENU, PLAYING, PAUSED, LOST };
+
     class Game {
     private:
         int scrwidth, scrheight;
@@ -13,6 +15,7 @@ namespace as {
         SDL_Renderer *rend;
         SDL_Texture *alien_tex;
 
+        GameState state;
         bool running, clicked;
         int click_x, click_y;
 
