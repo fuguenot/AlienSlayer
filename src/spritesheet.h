@@ -7,16 +7,15 @@
 namespace as {
     class Spritesheet {
     private:
-        std::string file;
-        SDL_Texture *tex;
+        std::string name;
         SDL_Rect srcrect;
+        SDL_Texture *tex;
 
     public:
-        Spritesheet(const std::string &file,
-                    SDL_Renderer *rend,
+        Spritesheet(const std::string &name,
+                    SDL_Texture *tex,
                     int size_w,
                     int size_h);
-        ~Spritesheet() noexcept;
 
         void select(int x, int y) noexcept;
 

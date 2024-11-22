@@ -4,18 +4,13 @@
 
 #include "error.h"
 
-as::Spritesheet::Spritesheet(const std::string &file,
-                             SDL_Renderer *rend,
+as::Spritesheet::Spritesheet(const std::string &name,
+                             SDL_Texture *tex,
                              int size_w,
                              int size_h)
-    : file(file),
+    : name(name),
+      tex(tex),
       srcrect{0, 0, size_w, size_h} {
-    if ((tex = IMG_LoadTexture(rend, file.c_str())) == nullptr)
-        throw Error::sdl("initializing spritesheet texture '" + file + '\'');
-}
-
-as::Spritesheet::~Spritesheet() noexcept {
-    SDL_DestroyTexture(tex);
 }
 
 void as::Spritesheet::select(int x, int y) noexcept {
@@ -25,5 +20,5 @@ void as::Spritesheet::select(int x, int y) noexcept {
 
 void as::Spritesheet::render(SDL_Renderer *rend, SDL_Rect dstrect) {
     if (SDL_RenderCopy(rend, tex, &srcrect, &dstrect) < 0)
-        throw Error::sdl("rendering spritesheet texture '" + file + '\'');
+        throw Error::sdl("rendering spritesheet texture '" + name + '\'');
 }

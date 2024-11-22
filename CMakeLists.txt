@@ -29,6 +29,8 @@ add_executable(
   "src/spritesheet.cpp"
   "src/util.h"
   "src/util.cpp"
+  "src/alien.h"
+  "src/alien.cpp"
   "Resources/alienslayer.icns")
 
 set_target_properties(

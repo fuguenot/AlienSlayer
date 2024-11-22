@@ -5,16 +5,13 @@
 
 #include "error.h"
 
-as::Game::Game()
-    : win(nullptr),
-      rend(nullptr),
-      running(false),
-      click_x(-1),
-      click_y(-1) {
+as::Game::Game() : running(false), click_x(-1), click_y(-1) {
     init_sdl();
 }
 
 as::Game::~Game() {
+    SDL_DestroyTexture(alien_tex);
+
     SDL_DestroyRenderer(rend);
     SDL_DestroyWindow(win);
 
@@ -42,6 +39,10 @@ void as::Game::init_sdl() {
              SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC))
         == nullptr)
         throw Error::sdl("creating SDL_Renderer");
+
+    if ((alien_tex = IMG_LoadTexture(rend, "../Resources/alien.png"))
+        == nullptr)
+        throw Error::sdl("initializing alien texture");
 }
 
 void as::Game::handle_events() {
@@ -63,11 +64,18 @@ void as::Game::update() {
 
 void as::Game::render() {
     if (SDL_RenderClear(rend) < 0) throw Error::sdl("clearing screen");
+
+    for (Alien alien : aliens)
+        alien.render(rend);
+
     SDL_RenderPresent(rend);
 }
 
 void as::Game::start() {
     running = true;
+
+    // debug
+    aliens.emplace_back(alien_tex, 40, 30, 0, 0);
 
     while (running) {
         handle_events();
