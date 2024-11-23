@@ -20,6 +20,13 @@ namespace as {
         SDL_Texture *diff_tex;
         SDL_Texture *passed_tex;
 
+        int title_w, title_h;
+        int play_btn_w, play_btn_h;
+        int quit_btn_w, quit_btn_h;
+        int score_w, score_h;
+        int diff_w, diff_h;
+        int passed_w, passed_h;
+
     public:
         TextManager() noexcept;
 
@@ -31,12 +38,12 @@ namespace as {
 
         ~TextManager() noexcept;
 
-        void render_title(SDL_Renderer *rend, SDL_Rect dstrect);
-        void render_play_btn(SDL_Renderer *rend, SDL_Rect dstrect);
-        void render_quit_btn(SDL_Renderer *rend, SDL_Rect dstrect);
-        void render_score(SDL_Renderer *rend, SDL_Rect dstrect);
-        void render_diff(SDL_Renderer *rend, SDL_Rect dstrect);
-        void render_passed(SDL_Renderer *rend, SDL_Rect dstrect);
+        void render_title(SDL_Renderer *rend, int x, int y);
+        void render_play_btn(SDL_Renderer *rend, int x, int y);
+        void render_quit_btn(SDL_Renderer *rend, int x, int y);
+        void render_score(SDL_Renderer *rend, int x, int y);
+        void render_diff(SDL_Renderer *rend, int x, int y);
+        void render_passed(SDL_Renderer *rend, int x, int y);
 
         void update_score(SDL_Renderer *rend,
                           unsigned int score,

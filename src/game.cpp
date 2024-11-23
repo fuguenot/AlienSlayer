@@ -1,7 +1,6 @@
 #include "game.h"
 
 #include <SDL_image.h>
-#include <SDL_ttf.h>
 
 #include "error.h"
 #include "util.h"
@@ -16,7 +15,10 @@ as::Game::Game()
       spawn_timer(START_SPAWN_INTERVAL),
       score(0),
       difficulty(1),
-      passed(0) {
+      passed(0),
+      score_changed(false),
+      diff_changed(false),
+      passed_changed(false) {
     init_sdl();
 }
 
@@ -54,6 +56,12 @@ void as::Game::init_sdl() {
     if ((alien_tex = IMG_LoadTexture(rend, "../Resources/alien.png"))
         == nullptr)
         throw Error::sdl("initializing alien texture");
+
+    text_manager.init(rend,
+                      "../Resources/opensans.ttf",
+                      score,
+                      difficulty,
+                      passed);
 }
 
 void as::Game::handle_events() {
@@ -100,8 +108,10 @@ int as::Game::update_aliens(std::uint64_t dt) {
         alien.update(dt, scrwidth, scrheight);
         if (alien.get_state() == AlienState::DEAD)
             hits++;
-        else if (alien.get_state() == AlienState::PASSED)
+        else if (alien.get_state() == AlienState::PASSED) {
             passed++;
+            passed_changed = true;
+        }
     }
     aliens.erase(std::remove_if(aliens.begin(),
                                 aliens.end(),
@@ -115,6 +125,10 @@ int as::Game::update_aliens(std::uint64_t dt) {
 }
 
 void as::Game::update(std::uint64_t dt) {
+    score_changed = false;
+    diff_changed = false;
+    passed_changed = false;
+
     if (spawn_timer >= START_SPAWN_INTERVAL - difficulty * 100) {
         spawn_aliens();
         spawn_timer = 0;
@@ -122,17 +136,31 @@ void as::Game::update(std::uint64_t dt) {
     spawn_timer += dt;
 
     int hits = update_aliens(dt);
-    if (hits > 0) score += hits * 2 - 1;
-    if (score >= difficulty * 10) difficulty++;
+    if (hits > 0) {
+        score += hits * 2 - 1;
+        score_changed = true;
+    }
+    if (score >= difficulty * 10) {
+        difficulty++;
+        diff_changed = true;
+    }
     if (passed >= 50) state = GameState::LOST;
     clicked = false;
 }
 
 void as::Game::render() {
+    if (score_changed) text_manager.update_score(rend, score);
+    if (diff_changed) text_manager.update_diff(rend, difficulty);
+    if (passed_changed) text_manager.update_passed(rend, passed);
+
     if (SDL_RenderClear(rend) < 0) throw Error::sdl("clearing screen");
 
     for (Alien &alien : aliens)
         alien.render(rend);
+
+    text_manager.render_score(rend, scrwidth / 4, 15);
+    text_manager.render_diff(rend, scrwidth / 2, 15);
+    text_manager.render_passed(rend, scrwidth * 3 / 4, 15);
 
     SDL_RenderPresent(rend);
 }
