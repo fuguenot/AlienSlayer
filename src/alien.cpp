@@ -30,6 +30,10 @@ bool as::Alien::check_hit(int click_x, int click_y) const noexcept {
                   < THRESHOLD;
 }
 
+bool as::Alien::count_passed(unsigned int difficulty) const noexcept {
+    return life_timer > 500 - difficulty * 4;
+}
+
 void as::Alien::hit() {
     state = AlienState::HIT;
     spritesheet.select(0, 1);
@@ -38,6 +42,7 @@ void as::Alien::hit() {
 void as::Alien::update(std::uint64_t dt, int scrwidth, int scrheight) {
     switch (state) {
     case AlienState::ALIVE:
+        life_timer += dt;
         x += vx * dt / 15;
         y += vy * dt / 15;
 
@@ -49,7 +54,10 @@ void as::Alien::update(std::uint64_t dt, int scrwidth, int scrheight) {
             state = AlienState::PASSED;
         break;
     case AlienState::HIT:
-        if (dt * death_timer++ >= 600) state = AlienState::DEAD;
+        if (death_timer >= 600)
+            state = AlienState::DEAD;
+        else
+            death_timer += dt;
     default: break;
     }
 }

@@ -19,7 +19,8 @@ int as::Game::update_aliens(std::uint64_t dt) {
         alien.update(dt, scrwidth, scrheight);
         if (alien.get_state() == AlienState::DEAD)
             hits++;
-        else if (alien.get_state() == AlienState::PASSED) {
+        else if (alien.get_state() == AlienState::PASSED
+                 && alien.count_passed(difficulty)) {
             passed++;
             passed_changed = true;
         }
