@@ -4,6 +4,7 @@
 #include <SDL_ttf.h>
 
 #include "error.h"
+#include "util.h"
 
 as::Game::Game()
     : scrwidth(800),
@@ -12,6 +13,7 @@ as::Game::Game()
       running(false),
       click_x(-1),
       click_y(-1),
+      spawn_timer(START_SPAWN_INTERVAL),
       score(0),
       difficulty(1),
       passed(0) {
@@ -81,15 +83,24 @@ void as::Game::handle_events() {
     }
 }
 
-void as::Game::update(std::uint64_t dt) {
+void as::Game::spawn_aliens() {
+    for (int i = 0; i <= difficulty; i++) {
+        aliens.push_back(Alien::spawn(
+            alien_tex,
+            0,
+            rand_float(0, static_cast<float>(scrheight) / Alien::SCALE),
+            difficulty));
+    }
+}
+
+int as::Game::update_aliens(std::uint64_t dt) {
     int hits = 0;
     for (Alien &alien : aliens) {
         if (clicked && alien.check_hit(click_x, click_y)) alien.hit();
         alien.update(dt, scrwidth, scrheight);
-        if (alien.get_state() == AlienState::HIT) {
+        if (alien.get_state() == AlienState::HIT)
             hits++;
-            score++;
-        } else if (alien.get_state() == AlienState::PASSED)
+        else if (alien.get_state() == AlienState::PASSED)
             passed++;
     }
     aliens.erase(std::remove_if(aliens.begin(),
@@ -100,7 +111,18 @@ void as::Game::update(std::uint64_t dt) {
                                                   == AlienState::PASSED;
                                 }),
                  aliens.end());
-    if (hits > 1) score += hits - 1;
+    return hits;
+}
+
+void as::Game::update(std::uint64_t dt) {
+    if (spawn_timer >= START_SPAWN_INTERVAL - difficulty * 100) {
+        spawn_aliens();
+        spawn_timer = 0;
+    }
+    spawn_timer += dt;
+
+    int hits = update_aliens(dt);
+    if (hits > 0) score += hits * 2 - 1;
     if (score >= difficulty * 10) difficulty++;
     if (passed >= 50) state = GameState::LOST;
     clicked = false;
@@ -119,12 +141,6 @@ void as::Game::start() {
     running = true;
     std::uint64_t now, dt;
     std::uint64_t prev = 0;
-
-    // debug
-    aliens.push_back(Alien::spawn(alien_tex,
-                                  scrwidth / 2.f / Alien::SCALE,
-                                  scrheight / 2.f / Alien::SCALE,
-                                  0));
 
     while (running) {
         now = SDL_GetTicks64();

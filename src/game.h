@@ -9,6 +9,8 @@ namespace as {
 
     class Game {
     private:
+        static const std::uint64_t START_SPAWN_INTERVAL = 4000;
+
         int scrwidth, scrheight;
 
         SDL_Window *win;
@@ -19,12 +21,16 @@ namespace as {
         bool running, clicked;
         int click_x, click_y;
 
+        std::uint64_t spawn_timer;
+
         std::vector<Alien> aliens;
 
         unsigned int score, difficulty, passed;
 
         void init_sdl();
         void handle_events();
+        void spawn_aliens();
+        int update_aliens(std::uint64_t dt);
         void update(std::uint64_t dt);
         void render();
 
