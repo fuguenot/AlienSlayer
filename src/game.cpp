@@ -70,13 +70,6 @@ void as::Game::handle_events() {
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
         case SDL_QUIT: running = false; break;
-        case SDL_WINDOWEVENT:
-            switch (e.window.type) {
-            case SDL_WINDOWEVENT_SIZE_CHANGED:
-                scrwidth = e.window.data1;
-                scrheight = e.window.data2;
-                break;
-            }
         case SDL_MOUSEBUTTONDOWN:
             if (e.button.button == SDL_BUTTON_LEFT) {
                 clicked = true;
@@ -84,6 +77,14 @@ void as::Game::handle_events() {
                 click_y = e.button.y;
             }
             break;
+        case SDL_KEYDOWN:
+            if (e.key.keysym.scancode == SDL_SCANCODE_F) {
+                SDL_SetWindowFullscreen(
+                    win,
+                    SDL_GetWindowFlags(win) & SDL_WINDOW_FULLSCREEN_DESKTOP
+                        ? 0
+                        : SDL_WINDOW_FULLSCREEN_DESKTOP);
+            }
         }
 
         keystate = SDL_GetKeyboardState(NULL);
@@ -125,6 +126,8 @@ int as::Game::update_aliens(std::uint64_t dt) {
 }
 
 void as::Game::update(std::uint64_t dt) {
+    SDL_GetWindowSize(win, &scrwidth, &scrheight);
+
     score_changed = false;
     diff_changed = false;
     passed_changed = false;
