@@ -32,7 +32,7 @@ namespace as {
         TTF_Font *btn_font;
         TTF_Font *main_font;
 
-        TextTexture title, play_btn, quit_btn, score, diff, passed;
+        TextTexture title, play_btn, quit_btn, paused, score, diff, passed;
         TextManager() noexcept;
 
         void init(SDL_Renderer *rend,

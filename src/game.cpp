@@ -70,7 +70,8 @@ void as::Game::handle_events() {
         switch (e.type) {
         case SDL_QUIT: running = false; break;
         case SDL_MOUSEBUTTONDOWN:
-            if (e.button.button == SDL_BUTTON_LEFT) {
+            if (state == GameState::PLAYING
+                && e.button.button == SDL_BUTTON_LEFT) {
                 clicked = true;
                 click_x = e.button.x;
                 click_y = e.button.y;
@@ -85,6 +86,12 @@ void as::Game::handle_events() {
                     SDL_GetWindowFlags(win) & SDL_WINDOW_FULLSCREEN_DESKTOP
                         ? 0
                         : SDL_WINDOW_FULLSCREEN_DESKTOP);
+                break;
+            case SDL_SCANCODE_P:
+                if (state == GameState::PLAYING)
+                    state = GameState::PAUSED;
+                else if (state == GameState::PAUSED)
+                    state = GameState::PLAYING;
                 break;
             default: break;
             }
@@ -101,6 +108,9 @@ void as::Game::render() {
     text_manager.score.render(rend, scrwidth / 4, 15);
     text_manager.diff.render(rend, scrwidth / 2, 15);
     text_manager.passed.render(rend, scrwidth * 3 / 4, 15);
+
+    if (state == GameState::PAUSED)
+        text_manager.paused.render(rend, scrwidth / 2, scrheight / 2);
 
     SDL_RenderPresent(rend);
 }

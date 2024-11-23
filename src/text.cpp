@@ -44,6 +44,7 @@ as::TextManager::TextManager() noexcept
       title("title"),
       play_btn("play button"),
       quit_btn("quit button"),
+      paused("paused"),
       score("score"),
       diff("difficulty"),
       passed("passed") {
@@ -64,6 +65,7 @@ void as::TextManager::init(SDL_Renderer *rend,
     title.init(rend, title_font, "ALIEN SLAYER");
     play_btn.init(rend, btn_font, "play");
     quit_btn.init(rend, btn_font, "quit");
+    paused.init(rend, btn_font, "paused");
     this->score.init(rend, main_font, "Score: " + std::to_string(score));
     this->diff.init(rend, main_font, "Difficulty: " + std::to_string(diff));
     this->passed.init(rend, main_font, "Passed: " + std::to_string(passed));
