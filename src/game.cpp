@@ -78,17 +78,18 @@ void as::Game::handle_events() {
             }
             break;
         case SDL_KEYDOWN:
-            if (e.key.keysym.scancode == SDL_SCANCODE_F) {
+            switch (e.key.keysym.scancode) {
+            case SDL_SCANCODE_ESCAPE: running = false; break;
+            case SDL_SCANCODE_F:
                 SDL_SetWindowFullscreen(
                     win,
                     SDL_GetWindowFlags(win) & SDL_WINDOW_FULLSCREEN_DESKTOP
                         ? 0
                         : SDL_WINDOW_FULLSCREEN_DESKTOP);
+                break;
+            default: break;
             }
         }
-
-        keystate = SDL_GetKeyboardState(NULL);
-        if (keystate[SDL_SCANCODE_ESCAPE]) running = false;
     }
 }
 
