@@ -5,29 +5,34 @@
 #include <SDL_ttf.h>
 
 namespace as {
+    class TextTexture {
+    public:
+        std::string name;
+
+        TTF_Font *font;
+        SDL_Texture *tex;
+        int w, h;
+
+        TextTexture(const std::string &name) noexcept;
+        void init(SDL_Renderer *rend, TTF_Font *font, const std::string &text);
+        ~TextTexture() noexcept;
+
+        void render(SDL_Renderer *rend, int x, int y);
+        void update(SDL_Renderer *rend,
+                    const std::string &text,
+                    bool free = true);
+    };
+
     class TextManager {
     private:
         bool initialized;
 
+    public:
         TTF_Font *title_font;
         TTF_Font *btn_font;
         TTF_Font *main_font;
 
-        SDL_Texture *title_tex;
-        SDL_Texture *play_btn_tex;
-        SDL_Texture *quit_btn_tex;
-        SDL_Texture *score_tex;
-        SDL_Texture *diff_tex;
-        SDL_Texture *passed_tex;
-
-        int title_w, title_h;
-        int play_btn_w, play_btn_h;
-        int quit_btn_w, quit_btn_h;
-        int score_w, score_h;
-        int diff_w, diff_h;
-        int passed_w, passed_h;
-
-    public:
+        TextTexture title, play_btn, quit_btn, score, diff, passed;
         TextManager() noexcept;
 
         void init(SDL_Renderer *rend,
@@ -35,24 +40,5 @@ namespace as {
                   unsigned int score,
                   unsigned int diff,
                   unsigned int passed);
-
-        ~TextManager() noexcept;
-
-        void render_title(SDL_Renderer *rend, int x, int y);
-        void render_play_btn(SDL_Renderer *rend, int x, int y);
-        void render_quit_btn(SDL_Renderer *rend, int x, int y);
-        void render_score(SDL_Renderer *rend, int x, int y);
-        void render_diff(SDL_Renderer *rend, int x, int y);
-        void render_passed(SDL_Renderer *rend, int x, int y);
-
-        void update_score(SDL_Renderer *rend,
-                          unsigned int score,
-                          bool free = true);
-        void update_diff(SDL_Renderer *rend,
-                         unsigned int diff,
-                         bool free = true);
-        void update_passed(SDL_Renderer *rend,
-                           unsigned int passed,
-                           bool free = true);
     };
 }  // namespace as

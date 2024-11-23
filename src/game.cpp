@@ -149,18 +149,22 @@ void as::Game::update(std::uint64_t dt) {
 }
 
 void as::Game::render() {
-    if (score_changed) text_manager.update_score(rend, score);
-    if (diff_changed) text_manager.update_diff(rend, difficulty);
-    if (passed_changed) text_manager.update_passed(rend, passed);
+    if (score_changed)
+        text_manager.score.update(rend, "Score: " + std::to_string(score));
+    if (diff_changed)
+        text_manager.diff.update(rend,
+                                 "Difficulty: " + std::to_string(difficulty));
+    if (passed_changed)
+        text_manager.passed.update(rend, "Passed: " + std::to_string(passed));
 
     if (SDL_RenderClear(rend) < 0) throw Error::sdl("clearing screen");
 
     for (Alien &alien : aliens)
         alien.render(rend);
 
-    text_manager.render_score(rend, scrwidth / 4, 15);
-    text_manager.render_diff(rend, scrwidth / 2, 15);
-    text_manager.render_passed(rend, scrwidth * 3 / 4, 15);
+    text_manager.score.render(rend, scrwidth / 4, 15);
+    text_manager.diff.render(rend, scrwidth / 2, 15);
+    text_manager.passed.render(rend, scrwidth * 3 / 4, 15);
 
     SDL_RenderPresent(rend);
 }
