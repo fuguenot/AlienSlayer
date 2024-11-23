@@ -31,6 +31,8 @@ add_executable(
   "src/util.cpp"
   "src/alien.h"
   "src/alien.cpp"
+  "src/text.h"
+  "src/text.cpp"
   "Resources/alienslayer.icns")
 
 set_target_properties(
