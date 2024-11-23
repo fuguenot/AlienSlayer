@@ -98,7 +98,7 @@ int as::Game::update_aliens(std::uint64_t dt) {
     for (Alien &alien : aliens) {
         if (clicked && alien.check_hit(click_x, click_y)) alien.hit();
         alien.update(dt, scrwidth, scrheight);
-        if (alien.get_state() == AlienState::HIT)
+        if (alien.get_state() == AlienState::DEAD)
             hits++;
         else if (alien.get_state() == AlienState::PASSED)
             passed++;

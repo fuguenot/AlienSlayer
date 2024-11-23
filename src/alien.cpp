@@ -19,7 +19,7 @@ as::Alien as::Alien::spawn(SDL_Texture *tex,
                            float y,
                            unsigned int difficulty) {
     float theta = rand_float(-PI / 2, PI / 2);
-    float v = rand_float(0, 0.5) + difficulty;
+    float v = rand_float(0, 0.5) + difficulty * 0.5;
     return {tex, x, y, v * std::cosf(theta), v * std::sinf(theta)};
 }
 
