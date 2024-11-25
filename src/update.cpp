@@ -38,6 +38,8 @@ int as::Game::update_aliens(std::uint64_t dt) {
 
 void as::Game::update(std::uint64_t dt) {
     SDL_GetWindowSize(win, &scrwidth, &scrheight);
+    play_btn.update(scrwidth / 2, scrheight / 2 - 50);
+    quit_btn.update(scrwidth / 2, scrheight / 2 + 50);
 
     if (state == GameState::PLAYING) {
         score_changed = false;

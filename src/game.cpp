@@ -7,6 +7,8 @@
 as::Game::Game()
     : scrwidth(800),
       scrheight(600),
+      play_btn("play button"),
+      quit_btn("quit button"),
       state(GameState::MENU),
       running(false),
       click_x(-1),
@@ -61,6 +63,17 @@ void as::Game::init_sdl() {
                       score,
                       difficulty,
                       passed);
+
+    play_btn.init(rend,
+                  text_manager.btn_font,
+                  "play",
+                  scrwidth / 2,
+                  scrheight / 2 - 50);
+    quit_btn.init(rend,
+                  text_manager.btn_font,
+                  "quit",
+                  scrwidth / 2,
+                  scrheight / 2 + 50);
 }
 
 void as::Game::handle_events() {
@@ -70,11 +83,22 @@ void as::Game::handle_events() {
         switch (e.type) {
         case SDL_QUIT: running = false; break;
         case SDL_MOUSEBUTTONDOWN:
-            if (state == GameState::PLAYING
-                && e.button.button == SDL_BUTTON_LEFT) {
-                clicked = true;
-                click_x = e.button.x;
-                click_y = e.button.y;
+            if (e.button.button == SDL_BUTTON_LEFT) {
+                switch (state) {
+                case GameState::PLAYING:
+                    clicked = true;
+                    click_x = e.button.x;
+                    click_y = e.button.y;
+                    break;
+                case GameState::MENU:
+                    if (play_btn.inside(e.button.x, e.button.y))
+                        state = GameState::PLAYING;
+                    else if (quit_btn.inside(e.button.x, e.button.y))
+                        running = false;
+                    break;
+                default: break;
+                }
+                break;
             }
             break;
         case SDL_KEYDOWN:
@@ -105,8 +129,8 @@ void as::Game::render() {
     if (state == GameState::MENU) {
         text_manager.title.render(rend, scrwidth / 2, 15);
 
-        text_manager.play_btn.render(rend, scrwidth / 2, scrheight / 2 - 50);
-        text_manager.quit_btn.render(rend, scrwidth / 2, scrheight / 2 + 50);
+        play_btn.render(rend);
+        quit_btn.render(rend);
     } else {
         for (Alien &alien : aliens)
             alien.render(rend);

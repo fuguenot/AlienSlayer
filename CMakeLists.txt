@@ -34,6 +34,8 @@ add_executable(
   "src/text.h"
   "src/text.cpp"
   "src/update.cpp"
+  "src/button.h"
+  "src/button.cpp"
   "Resources/alienslayer.icns")
 
 set_target_properties(

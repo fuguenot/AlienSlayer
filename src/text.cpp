@@ -49,8 +49,6 @@ void as::TextTexture::update(SDL_Renderer *rend,
 as::TextManager::TextManager() noexcept
     : initialized(false),
       title("title"),
-      play_btn("play button"),
-      quit_btn("quit button"),
       end_score("end score"),
       end_diff("end difficulty"),
       lost("lost"),
@@ -75,9 +73,6 @@ void as::TextManager::init(SDL_Renderer *rend,
         throw Error::sdl("initializing main font");
 
     title.init(rend, title_font, "ALIEN SLAYER");
-
-    play_btn.init(rend, btn_font, "play");
-    quit_btn.init(rend, btn_font, "quit");
 
     end_score.init(main_font);
     end_diff.init(main_font);

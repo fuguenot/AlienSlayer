@@ -35,7 +35,6 @@ namespace as {
         TTF_Font *main_font;
 
         TextTexture title;
-        TextTexture play_btn, quit_btn;
         TextTexture end_score, end_diff, lost, paused;
         TextTexture score, diff, passed;
 

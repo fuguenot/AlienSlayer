@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "alien.h"
-#include "text.h"
+#include "button.h"
 
 namespace as {
     enum class GameState { MENU, PLAYING, PAUSED, LOST };
@@ -18,6 +18,7 @@ namespace as {
         SDL_Renderer *rend;
         SDL_Texture *alien_tex;
         TextManager text_manager;
+        Button play_btn, quit_btn;
 
         GameState state;
         bool running, clicked;
