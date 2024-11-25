@@ -5,10 +5,14 @@
 as::TextTexture::TextTexture(const std::string &name) noexcept : name(name) {
 }
 
+void as::TextTexture::init(TTF_Font *font) noexcept {
+    this->font = font;
+}
+
 void as::TextTexture::init(SDL_Renderer *rend,
                            TTF_Font *font,
                            const std::string &text) {
-    this->font = font;
+    init(font);
     update(rend, text, false);
 }
 
@@ -16,8 +20,11 @@ as::TextTexture::~TextTexture() noexcept {
     SDL_DestroyTexture(tex);
 }
 
-void as::TextTexture::render(SDL_Renderer *rend, int x, int y) {
-    SDL_Rect dstrect{x, y, w, h};
+void as::TextTexture::render(SDL_Renderer *rend,
+                             int x,
+                             int y,
+                             bool centered_x) {
+    SDL_Rect dstrect{centered_x ? x - w / 2 : x, y, w, h};
     if (SDL_RenderCopy(rend, tex, nullptr, &dstrect) < 0)
         throw Error::sdl("rendering text texture '" + name + '\'');
 }
@@ -44,6 +51,9 @@ as::TextManager::TextManager() noexcept
       title("title"),
       play_btn("play button"),
       quit_btn("quit button"),
+      end_score("end score"),
+      end_diff("end difficulty"),
+      lost("lost"),
       paused("paused"),
       score("score"),
       diff("difficulty"),
@@ -63,12 +73,18 @@ void as::TextManager::init(SDL_Renderer *rend,
         throw Error::sdl("initializing main font");
 
     title.init(rend, title_font, "ALIEN SLAYER");
+
     play_btn.init(rend, btn_font, "play");
     quit_btn.init(rend, btn_font, "quit");
+
+    end_score.init(main_font);
+    end_diff.init(main_font);
+    lost.init(rend, btn_font, "you lost");
     paused.init(rend, btn_font, "paused");
-    this->score.init(rend, main_font, "Score: " + std::to_string(score));
-    this->diff.init(rend, main_font, "Difficulty: " + std::to_string(diff));
-    this->passed.init(rend, main_font, "Passed: " + std::to_string(passed));
+
+    this->score.init(rend, main_font, "score: " + std::to_string(score));
+    this->diff.init(rend, main_font, "difficulty: " + std::to_string(diff));
+    this->passed.init(rend, main_font, "passed: " + std::to_string(passed));
 
     initialized = true;
 }

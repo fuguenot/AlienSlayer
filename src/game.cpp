@@ -111,6 +111,11 @@ void as::Game::render() {
 
     if (state == GameState::PAUSED)
         text_manager.paused.render(rend, scrwidth / 2, scrheight / 2);
+    else if (state == GameState::LOST) {
+        text_manager.lost.render(rend, scrwidth / 2, scrheight / 2);
+        text_manager.end_score.render(rend, scrwidth / 2, scrheight / 2 + 35);
+        text_manager.end_diff.render(rend, scrwidth / 2, scrheight / 2 + 60);
+    }
 
     SDL_RenderPresent(rend);
 }

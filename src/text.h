@@ -14,10 +14,11 @@ namespace as {
         int w, h;
 
         TextTexture(const std::string &name) noexcept;
+        void init(TTF_Font *font) noexcept;
         void init(SDL_Renderer *rend, TTF_Font *font, const std::string &text);
         ~TextTexture() noexcept;
 
-        void render(SDL_Renderer *rend, int x, int y);
+        void render(SDL_Renderer *rend, int x, int y, bool centered_x = true);
         void update(SDL_Renderer *rend,
                     const std::string &text,
                     bool free = true);
@@ -32,7 +33,11 @@ namespace as {
         TTF_Font *btn_font;
         TTF_Font *main_font;
 
-        TextTexture title, play_btn, quit_btn, paused, score, diff, passed;
+        TextTexture title;
+        TextTexture play_btn, quit_btn;
+        TextTexture end_score, end_diff, lost, paused;
+        TextTexture score, diff, passed;
+
         TextManager() noexcept;
 
         void init(SDL_Renderer *rend,

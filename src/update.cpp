@@ -59,17 +59,25 @@ void as::Game::update(std::uint64_t dt) {
             difficulty++;
             diff_changed = true;
         }
-        if (passed >= 50) state = GameState::LOST;
+        if (passed >= 50) {
+            state = GameState::LOST;
+            text_manager.end_score.update(
+                rend,
+                "final score: " + std::to_string(score));
+            text_manager.end_diff.update(
+                rend,
+                "final difficulty: " + std::to_string(difficulty));
+        }
         clicked = false;
 
         if (score_changed)
-            text_manager.score.update(rend, "Score: " + std::to_string(score));
+            text_manager.score.update(rend, "score: " + std::to_string(score));
         if (diff_changed)
             text_manager.diff.update(
                 rend,
-                "Difficulty: " + std::to_string(difficulty));
+                "difficulty: " + std::to_string(difficulty));
         if (passed_changed)
             text_manager.passed.update(rend,
-                                       "Passed: " + std::to_string(passed));
+                                       "passed: " + std::to_string(passed));
     }
 }
