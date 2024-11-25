@@ -35,7 +35,7 @@ namespace as {
         TTF_Font *main_font;
 
         TextTexture title;
-        TextTexture end_score, end_diff, lost, paused;
+        TextTexture end_stats, lost, paused;
         TextTexture score, diff, passed;
 
         TextManager() noexcept;

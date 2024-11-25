@@ -49,8 +49,7 @@ void as::TextTexture::update(SDL_Renderer *rend,
 as::TextManager::TextManager() noexcept
     : initialized(false),
       title("title"),
-      end_score("end score"),
-      end_diff("end difficulty"),
+      end_stats("end stats"),
       lost("lost"),
       paused("paused"),
       score("score"),
@@ -74,8 +73,7 @@ void as::TextManager::init(SDL_Renderer *rend,
 
     title.init(rend, title_font, "ALIEN SLAYER");
 
-    end_score.init(main_font);
-    end_diff.init(main_font);
+    end_stats.init(main_font);
     lost.init(rend, title_font, "you lost");
     paused.init(rend, medium_font, "paused");
 

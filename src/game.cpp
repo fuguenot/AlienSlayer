@@ -10,17 +10,8 @@ as::Game::Game()
       play_btn("play button"),
       quit_btn("quit button"),
       again_btn("play again button"),
-      state(GameState::MENU),
-      running(false),
-      click_x(-1),
-      click_y(-1),
-      spawn_timer(START_SPAWN_INTERVAL),
-      score(0),
-      difficulty(1),
-      passed(0),
-      score_changed(false),
-      diff_changed(false),
-      passed_changed(false) {
+      menu_btn("menu button"),
+      state(GameState::MENU) {
     init_sdl();
 }
 
@@ -79,7 +70,12 @@ void as::Game::init_sdl() {
                    text_manager.btn_font,
                    "play again",
                    scrwidth / 2,
-                   scrheight / 2 + 45);
+                   scrheight / 2 + 20);
+    menu_btn.init(rend,
+                  text_manager.btn_font,
+                  "menu",
+                  scrwidth / 2,
+                  scrheight / 2 + 120);
 }
 
 void as::Game::handle_events() {
@@ -97,17 +93,18 @@ void as::Game::handle_events() {
                     click_y = e.button.y;
                     break;
                 case GameState::MENU:
-                    if (play_btn.inside(e.button.x, e.button.y))
+                    if (play_btn.inside(e.button.x, e.button.y)) {
+                        reset();
                         state = GameState::PLAYING;
-                    else if (quit_btn.inside(e.button.x, e.button.y))
+                    } else if (quit_btn.inside(e.button.x, e.button.y))
                         running = false;
                     break;
                 case GameState::LOST:
-                    if (again_btn.inside(e.button.x, e.button.y)
-                        && state == GameState::LOST) {
+                    if (again_btn.inside(e.button.x, e.button.y)) {
                         reset();
                         state = GameState::PLAYING;
-                    }
+                    } else if (menu_btn.inside(e.button.x, e.button.y))
+                        state = GameState::MENU;
                     break;
                 default: break;
                 }
@@ -155,14 +152,12 @@ void as::Game::render() {
         if (state == GameState::PAUSED)
             text_manager.paused.render(rend, scrwidth / 2, scrheight / 2);
         else if (state == GameState::LOST) {
-            text_manager.lost.render(rend, scrwidth / 2, scrheight / 2 - 125);
-            text_manager.end_score.render(rend,
+            text_manager.lost.render(rend, scrwidth / 2, scrheight / 2 - 150);
+            text_manager.end_stats.render(rend,
                                           scrwidth / 2,
-                                          scrheight / 2 - 15);
-            text_manager.end_diff.render(rend,
-                                         scrwidth / 2,
-                                         scrheight / 2 + 10);
+                                          scrheight / 2 - 25);
             again_btn.render(rend);
+            menu_btn.render(rend);
         }
     }
 
