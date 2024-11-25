@@ -9,6 +9,7 @@ as::Game::Game()
       scrheight(600),
       play_btn("play button"),
       quit_btn("quit button"),
+      again_btn("play again button"),
       state(GameState::MENU),
       running(false),
       click_x(-1),
@@ -74,6 +75,11 @@ void as::Game::init_sdl() {
                   "quit",
                   scrwidth / 2,
                   scrheight / 2 + 50);
+    again_btn.init(rend,
+                   text_manager.btn_font,
+                   "play again",
+                   scrwidth / 2,
+                   scrheight / 2 + 45);
 }
 
 void as::Game::handle_events() {
@@ -95,6 +101,13 @@ void as::Game::handle_events() {
                         state = GameState::PLAYING;
                     else if (quit_btn.inside(e.button.x, e.button.y))
                         running = false;
+                    break;
+                case GameState::LOST:
+                    if (again_btn.inside(e.button.x, e.button.y)
+                        && state == GameState::LOST) {
+                        reset();
+                        state = GameState::PLAYING;
+                    }
                     break;
                 default: break;
                 }
@@ -142,17 +155,36 @@ void as::Game::render() {
         if (state == GameState::PAUSED)
             text_manager.paused.render(rend, scrwidth / 2, scrheight / 2);
         else if (state == GameState::LOST) {
-            text_manager.lost.render(rend, scrwidth / 2, scrheight / 2);
+            text_manager.lost.render(rend, scrwidth / 2, scrheight / 2 - 125);
             text_manager.end_score.render(rend,
                                           scrwidth / 2,
-                                          scrheight / 2 + 35);
+                                          scrheight / 2 - 15);
             text_manager.end_diff.render(rend,
                                          scrwidth / 2,
-                                         scrheight / 2 + 60);
+                                         scrheight / 2 + 10);
+            again_btn.render(rend);
         }
     }
 
     SDL_RenderPresent(rend);
+}
+
+void as::Game::reset() {
+    text_manager.score.update(rend, "score: 0");
+    text_manager.diff.update(rend, "difficulty: 1");
+    text_manager.passed.update(rend, "passed: 0");
+
+    clicked = false;
+
+    spawn_timer = START_SPAWN_INTERVAL;
+    aliens.clear();
+
+    score = 0;
+    difficulty = 1;
+    passed = 0;
+    score_changed = false;
+    diff_changed = false;
+    passed_changed = false;
 }
 
 void as::Game::start() {

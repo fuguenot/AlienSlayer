@@ -18,7 +18,7 @@ namespace as {
         SDL_Renderer *rend;
         SDL_Texture *alien_tex;
         TextManager text_manager;
-        Button play_btn, quit_btn;
+        Button play_btn, quit_btn, again_btn;
 
         GameState state;
         bool running, clicked;
@@ -37,6 +37,8 @@ namespace as {
         int update_aliens(std::uint64_t dt);
         void update(std::uint64_t dt);
         void render();
+
+        void reset();
 
     public:
         Game();

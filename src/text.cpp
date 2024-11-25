@@ -76,7 +76,7 @@ void as::TextManager::init(SDL_Renderer *rend,
 
     end_score.init(main_font);
     end_diff.init(main_font);
-    lost.init(rend, medium_font, "you lost");
+    lost.init(rend, title_font, "you lost");
     paused.init(rend, medium_font, "paused");
 
     this->score.init(rend, main_font, "score: " + std::to_string(score));
