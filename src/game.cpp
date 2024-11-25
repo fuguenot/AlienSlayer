@@ -7,7 +7,7 @@
 as::Game::Game()
     : scrwidth(800),
       scrheight(600),
-      state(GameState::PLAYING),
+      state(GameState::MENU),
       running(false),
       click_x(-1),
       click_y(-1),
@@ -102,19 +102,30 @@ void as::Game::handle_events() {
 void as::Game::render() {
     if (SDL_RenderClear(rend) < 0) throw Error::sdl("clearing screen");
 
-    for (Alien &alien : aliens)
-        alien.render(rend);
+    if (state == GameState::MENU) {
+        text_manager.title.render(rend, scrwidth / 2, 15);
 
-    text_manager.score.render(rend, scrwidth / 4, 15);
-    text_manager.diff.render(rend, scrwidth / 2, 15);
-    text_manager.passed.render(rend, scrwidth * 3 / 4, 15);
+        text_manager.play_btn.render(rend, scrwidth / 2, scrheight / 2 - 50);
+        text_manager.quit_btn.render(rend, scrwidth / 2, scrheight / 2 + 50);
+    } else {
+        for (Alien &alien : aliens)
+            alien.render(rend);
 
-    if (state == GameState::PAUSED)
-        text_manager.paused.render(rend, scrwidth / 2, scrheight / 2);
-    else if (state == GameState::LOST) {
-        text_manager.lost.render(rend, scrwidth / 2, scrheight / 2);
-        text_manager.end_score.render(rend, scrwidth / 2, scrheight / 2 + 35);
-        text_manager.end_diff.render(rend, scrwidth / 2, scrheight / 2 + 60);
+        text_manager.score.render(rend, scrwidth / 4, 15);
+        text_manager.diff.render(rend, scrwidth / 2, 15);
+        text_manager.passed.render(rend, scrwidth * 3 / 4, 15);
+
+        if (state == GameState::PAUSED)
+            text_manager.paused.render(rend, scrwidth / 2, scrheight / 2);
+        else if (state == GameState::LOST) {
+            text_manager.lost.render(rend, scrwidth / 2, scrheight / 2);
+            text_manager.end_score.render(rend,
+                                          scrwidth / 2,
+                                          scrheight / 2 + 35);
+            text_manager.end_diff.render(rend,
+                                         scrwidth / 2,
+                                         scrheight / 2 + 60);
+        }
     }
 
     SDL_RenderPresent(rend);

@@ -31,6 +31,7 @@ namespace as {
     public:
         TTF_Font *title_font;
         TTF_Font *btn_font;
+        TTF_Font *medium_font;
         TTF_Font *main_font;
 
         TextTexture title;

@@ -65,10 +65,12 @@ void as::TextManager::init(SDL_Renderer *rend,
                            unsigned int score,
                            unsigned int diff,
                            unsigned int passed) {
-    if ((title_font = TTF_OpenFont(font_file.c_str(), 50)) == nullptr)
+    if ((title_font = TTF_OpenFont(font_file.c_str(), 75)) == nullptr)
         throw Error::sdl("initializing title font");
-    if ((btn_font = TTF_OpenFont(font_file.c_str(), 25)) == nullptr)
+    if ((btn_font = TTF_OpenFont(font_file.c_str(), 50)) == nullptr)
         throw Error::sdl("initializing button font");
+    if ((medium_font = TTF_OpenFont(font_file.c_str(), 25)) == nullptr)
+        throw Error::sdl("initializing medium font");
     if ((main_font = TTF_OpenFont(font_file.c_str(), 20)) == nullptr)
         throw Error::sdl("initializing main font");
 
@@ -79,8 +81,8 @@ void as::TextManager::init(SDL_Renderer *rend,
 
     end_score.init(main_font);
     end_diff.init(main_font);
-    lost.init(rend, btn_font, "you lost");
-    paused.init(rend, btn_font, "paused");
+    lost.init(rend, medium_font, "you lost");
+    paused.init(rend, medium_font, "paused");
 
     this->score.init(rend, main_font, "score: " + std::to_string(score));
     this->diff.init(rend, main_font, "difficulty: " + std::to_string(diff));
