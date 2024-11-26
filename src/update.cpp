@@ -1,14 +1,12 @@
 #include "game.h"
 
-#include "util.h"
-
 void as::Game::spawn_aliens() {
     for (int i = 0; i <= difficulty; i++) {
-        aliens.push_back(Alien::spawn(
-            alien_tex,
-            0,
-            rand_float(0, static_cast<float>(scrheight) / Alien::SCALE),
-            difficulty));
+        aliens.push_back(Alien::spawn(alien_tex,
+                                      rand_edge(),
+                                      scrwidth,
+                                      scrheight,
+                                      difficulty));
     }
 }
 
@@ -19,8 +17,7 @@ int as::Game::update_aliens(std::uint64_t dt) {
         alien.update(dt, scrwidth, scrheight);
         if (alien.get_state() == AlienState::DEAD)
             hits++;
-        else if (alien.get_state() == AlienState::PASSED
-                 && alien.count_passed(difficulty)) {
+        else if (alien.get_state() == AlienState::PASSED) {
             passed++;
             passed_changed = true;
         }

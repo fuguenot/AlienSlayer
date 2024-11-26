@@ -3,7 +3,11 @@
 #include "spritesheet.h"
 
 namespace as {
-    enum class AlienState : char { ALIVE, PASSED, DEAD, HIT };
+    enum class Edge : std::uint8_t { LEFT, UP, RIGHT, DOWN };
+
+    Edge rand_edge() noexcept;
+
+    enum class AlienState : std::uint8_t { ALIVE, PASSED, DEAD, HIT };
 
     class Alien {
     private:
@@ -15,7 +19,7 @@ namespace as {
         float x, y;
         float vx, vy;
         AlienState state;
-        unsigned int life_timer, death_timer;
+        unsigned int death_timer;
 
         Alien(SDL_Texture *tex, float x, float y, float vx, float vy);
 
@@ -24,12 +28,12 @@ namespace as {
 
         // v = rand[0, 0.5] + difficulty * 0.25; theta = rand[-π/2, π/2]
         static Alien spawn(SDL_Texture *tex,
-                           float x,
-                           float y,
+                           Edge edge,
+                           int scrwidth,
+                           int scrheight,
                            unsigned int difficulty);
 
         bool check_hit(int click_x, int click_y) const noexcept;
-        bool count_passed(unsigned int difficulty) const noexcept;
         void hit();
         void update(std::uint64_t dt, int scrwidth, int scrheight);
         void render(SDL_Renderer *rend);
