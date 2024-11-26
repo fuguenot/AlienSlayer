@@ -35,8 +35,13 @@ int as::Game::update_aliens(std::uint64_t dt) {
 
 void as::Game::update(std::uint64_t dt) {
     SDL_GetWindowSize(win, &scrwidth, &scrheight);
-    play_btn.update(scrwidth / 2, scrheight / 2 - 50);
-    quit_btn.update(scrwidth / 2, scrheight / 2 + 50);
+    if (state == GameState::MENU) {
+        play_btn.update(scrwidth / 2, scrheight / 2 - 50);
+        quit_btn.update(scrwidth / 2, scrheight / 2 + 50);
+    } else if (state == GameState::LOST) {
+        again_btn.update(scrwidth / 2, scrheight / 2 + 20);
+        menu_btn.update(scrwidth / 2, scrheight / 2 + 120);
+    }
 
     if (state == GameState::PLAYING) {
         score_changed = false;
