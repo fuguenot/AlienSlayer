@@ -37,7 +37,7 @@ void as::TextTexture::update(SDL_Renderer *rend,
     if ((surf =
              TTF_RenderText_Blended(font, text.c_str(), {255, 255, 255, 255}))
         == nullptr)
-        throw Error::sdl("rendering text '" + name + '\'');
+        throw Error::sdl_ttf("rendering text '" + name + '\'');
     if ((tex = SDL_CreateTextureFromSurface(rend, surf)) == nullptr)
         throw Error::sdl("converting text '" + name + "' surface to texture");
     SDL_FreeSurface(surf);
@@ -63,13 +63,13 @@ void as::TextManager::init(SDL_Renderer *rend,
                            unsigned int diff,
                            unsigned int passed) {
     if ((title_font = TTF_OpenFont(font_file.c_str(), 75)) == nullptr)
-        throw Error::sdl("initializing title font");
+        throw Error::sdl_ttf("initializing title font");
     if ((btn_font = TTF_OpenFont(font_file.c_str(), 50)) == nullptr)
-        throw Error::sdl("initializing button font");
+        throw Error::sdl_ttf("initializing button font");
     if ((medium_font = TTF_OpenFont(font_file.c_str(), 25)) == nullptr)
-        throw Error::sdl("initializing medium font");
+        throw Error::sdl_ttf("initializing medium font");
     if ((main_font = TTF_OpenFont(font_file.c_str(), 20)) == nullptr)
-        throw Error::sdl("initializing main font");
+        throw Error::sdl_ttf("initializing main font");
 
     title.init(rend, title_font, "ALIEN SLAYER");
 

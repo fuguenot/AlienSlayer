@@ -9,6 +9,7 @@ project(
 find_package(SDL2 REQUIRED CONFIG PATHS "Frameworks" NO_DEFAULT_PATH)
 find_package(SDL2_image REQUIRED CONFIG PATHS "Frameworks" NO_DEFAULT_PATH)
 find_package(SDL2_ttf REQUIRED CONFIG PATHS "Frameworks" NO_DEFAULT_PATH)
+find_package(SDL2_mixer REQUIRED CONFIG PATHS "Frameworks" NO_DEFAULT_PATH)
 
 file(COPY "Resources" DESTINATION "alienslayer.app/Contents")
 file(COPY "Frameworks" DESTINATION "alienslayer.app/Contents")
@@ -36,6 +37,8 @@ add_executable(
   "src/update.cpp"
   "src/button.h"
   "src/button.cpp"
+  "src/sound.h"
+  "src/sound.cpp"
   "Resources/alienslayer.icns")
 
 set_target_properties(
@@ -55,8 +58,10 @@ install(DIRECTORY "${CMAKE_SOURCE_DIR}/Frameworks/SDL2_image.framework"
         DESTINATION "alienslayer.app/Contents/Frameworks")
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/Frameworks/SDL2_ttf.framework"
         DESTINATION "alienslayer.app/Contents/Frameworks")
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/Frameworks/SDL2_mixer.framework"
+        DESTINATION "alienslayer.app/Contents/Frameworks")
 
 install(TARGETS AlienSlayer DESTINATION "${CMAKE_SOURCE_DIR}/build")
 
 target_link_libraries(AlienSlayer PRIVATE SDL2::SDL2 SDL2_image::SDL2_image
-                                          SDL2_ttf::SDL2_ttf)
+                                          SDL2_ttf::SDL2_ttf SDL2_mixer::SDL2_mixer)

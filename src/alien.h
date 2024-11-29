@@ -19,7 +19,7 @@ namespace as {
         float x, y;
         float vx, vy;
         AlienState state;
-        unsigned int death_timer;
+        std::uint64_t death_timer;
 
         Alien(SDL_Texture *tex, float x, float y, float vx, float vy);
 

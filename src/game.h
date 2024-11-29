@@ -4,6 +4,7 @@
 
 #include "alien.h"
 #include "button.h"
+#include "sound.h"
 
 namespace as {
     enum class GameState { MENU, PLAYING, PAUSED, LOST };
@@ -17,8 +18,11 @@ namespace as {
         SDL_Window *win;
         SDL_Renderer *rend;
         SDL_Texture *alien_tex;
-        TextManager text_manager;
+        TextManager text;
         Button play_btn, quit_btn, again_btn, menu_btn;
+
+        SoundManager sound;
+        bool muted;
 
         GameState state;
         bool running, clicked;
@@ -42,7 +46,7 @@ namespace as {
 
     public:
         Game();
-        ~Game();
+        ~Game() noexcept;
 
         void start();
     };
